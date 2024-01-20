@@ -1,40 +1,46 @@
-https://github.com/BennyKok/comfyui-deploy-next-example/assets/18395202/6e7e013c-21aa-432d-af77-07f729912f0f
+# Pixio API: Unleash Creativity with Ease
 
-Create an account on [ComfyDeply](https://comfydeploy.com/) setup your workflow and machine ([view here](https://twitter.com/BennyKokMusic/status/1746578134311243830)) and environemnt key
+Welcome to Pixio API - a serverless solution for integrating powerful AI models into your Next.js applications. Our platform is designed for developers who crave efficiency and innovation. Get started with Pixio API and transform your ideas into reality!
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Setting Up
 
-## Getting Started
+Before diving into the Pixio API, ensure you have an account set up on ComfyDeploy. Follow the steps to configure your workflow, machine, and environment key. [Setup Guide Here](#)
 
-First, run the development server:
+## Getting Started with Next.js
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This project is bootstrapped with `create-next-app`, giving you a solid foundation to build upon.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Running the Development Server
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Choose your preferred package manager and start your development server:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- `npm run dev`
+- `yarn dev`
+- `pnpm dev`
+- `bun dev`
 
-## Learn More
+Visit [http://localhost:3000](http://localhost:3000) in your browser to see your application in action.
 
-To learn more about Next.js, take a look at the following resources:
+### Editing Your Project
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Start by editing `app/page.tsx`. As you make changes, your page will auto-update, offering a seamless development experience.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Font Optimization
 
-## Deploy on Vercel
+This project utilizes `next/font` for automatic optimization and loading of Inter, a bespoke Google Font, ensuring your application looks as good as it works.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Learn More About Next.js
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+To deepen your understanding of Next.js, explore these resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - Discover the features and API of Next.js.
+- [Learn Next.js](https://nextjs.org/learn) - Engage with an interactive Next.js tutorial.
+- [Next.js GitHub Repository](https://github.com/vercel/next.js) - Join the community. Feedback and contributions are highly appreciated!
+
+## Deploying on Vercel
+
+For the smoothest deployment experience, use the [Vercel Platform](https://vercel.com), the birthplace of Next.js. Check our [deployment documentation](https://nextjs.org/docs/deployment) for detailed guidance.
+
+---
+
+Start your journey with Pixio API today and build the unimaginable!
