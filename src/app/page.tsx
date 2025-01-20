@@ -30,131 +30,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// ------------------ ImageGenerationResult Component ------------------
-// Shows each generated image, a download button, and handles "click to expand" modal.
-
-import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
-
-export function ImageGenerationResult({
-  runId,
-  className,
-}: { runId: string } & React.ComponentProps<"div">) {
-  const [image, setImage] = useState("");
-  const [status, setStatus] = useState<string>("preparing");
-  const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Poll for status until "success" and retrieve the image URL
-  useEffect(() => {
-    if (!runId) return;
-    const interval = setInterval(() => {
-      checkStatus(runId).then((res) => {
-        if (res) setStatus(res.status);
-        if (res && res.status === "success") {
-          setImage(res.outputs[0]?.data?.images[0].url);
-          setLoading(false);
-          clearInterval(interval);
-        }
-      });
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [runId]);
-
-  // Handle the direct download action using a Blob
-  const handleDownload = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation(); // Prevent the click from opening the modal
-    if (!image) return;
-
-    try {
-      // Fetch the image as a Blob
-      const response = await fetch(image);
-      const blob = await response.blob();
-
-      // Create a blob URL for forced download
-      const blobURL = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = blobURL;
-      link.download = "generated-image.png"; // Filename for the downloaded image
-      link.click();
-      URL.revokeObjectURL(blobURL); // Clean up
-    } catch (err) {
-      console.error("Download error: ", err);
-    }
-  };
-
-  return (
-    <>
-      <div
-        className={cn(
-          "border border-gray-700 w-full aspect-[512/768] rounded-lg relative overflow-hidden cursor-pointer",
-          className,
-          loading
-            ? "bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 animate-pulse"
-            : "bg-gray-800"
-        )}
-        onClick={() => {
-          // Open modal only if image is loaded (and not loading)
-          if (!loading && image) {
-            setIsModalOpen(true);
-          }
-        }}
-      >
-        {/* Display the image once loaded */}
-        {!loading && image && (
-          <img
-            className="w-full h-full object-contain"
-            src={image}
-            alt="Generated image"
-          />
-        )}
-
-        {/* Loading or waiting status */}
-        {!image && status && (
-          <div className="absolute inset-0 flex items-center justify-center gap-2 text-white">
-            {status} <LoadingIcon />
-          </div>
-        )}
-
-        {loading && <Skeleton className="w-full h-full" />}
-
-        {/* Download Button - only visible if not loading and we have an image */}
-        {!loading && image && (
-          <div className="absolute bottom-2 left-0 w-full flex justify-center">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={handleDownload}
-              className="bg-gradient-to-r from-pink-500 to-purple-600 text-white"
-            >
-              Download
-            </Button>
-          </div>
-        )}
-      </div>
-
-      {/* -------- Modal for expanded view -------- */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-          {/* Close button */}
-          <button
-            className="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded px-3 py-1"
-            onClick={() => setIsModalOpen(false)}
-          >
-            X
-          </button>
-
-          {/* Expanded Image */}
-          <img
-            src={image}
-            alt="Expanded generated image"
-            className="max-h-full max-w-full object-contain"
-          />
-        </div>
-      )}
-    </>
-  );
-}
+import ImageGenerationResult from "@/components/ImageGenerationResult"; 
+// <-- Import default from the new file
 
 // -------------------------------------------------------------------
 // ------------------ Main Page Component ----------------------------
@@ -211,8 +88,7 @@ export default function Page() {
 // --------------------------------------------------------------
 
 /**
- * txt2img generates 2 images per click.
- * Each image = 50 credits => total 100 credits cost.
+ * txt2img generates 2 images per click => 2 * 50 = 100 credits
  */
 function Txt2img({
   credits,
@@ -230,16 +106,16 @@ function Txt2img({
     e.preventDefault();
     if (loading) return;
 
-    // Check if user has enough credits (100 for 2 images)
+    // Check if user has enough credits
     if (credits < 100) {
       alert("Not enough credits to generate images!");
       return;
     }
 
-    setLoading(true);
-    // Deduct 100 credits right away
+    // Deduct 100 credits
     setCredits((prev) => prev - 100);
 
+    setLoading(true);
     const promises = Array(2)
       .fill(null)
       .map(() =>
@@ -278,7 +154,6 @@ function Txt2img({
               className="mt-1 bg-gray-700 border border-gray-600 w-full"
             />
           </div>
-
           <div>
             <Label htmlFor="negative-prompt" className="text-purple-300">
               Negative prompt
@@ -316,9 +191,8 @@ function Txt2img({
 // --------------------------------------------------------------
 // ------------------ Img2img Component -------------------------
 // --------------------------------------------------------------
-
 /**
- * img2img generates 1 image => 50 credits
+ * img2img => 1 image => 50 credits
  */
 function Img2img({
   credits,
@@ -359,16 +233,14 @@ function Img2img({
     e.preventDefault();
     if (loading || !prompt) return;
 
-    // Check if user has enough credits (50 for 1 image)
+    // Check if user has enough credits (50)
     if (credits < 50) {
-      alert("Not enough credits to generate an image!");
+      alert("Not enough credits!");
       return;
     }
-
-    setStatus("Uploading...");
-    // Deduct 50 credits right away
     setCredits((prev) => prev - 50);
 
+    setStatus("Uploading...");
     getUploadUrl(prompt.type, prompt.size)
       .then((res) => {
         if (!res) return;
@@ -428,7 +300,6 @@ function Img2img({
             Generate {loading && <LoadingIcon />}
           </Button>
 
-          {/* Show a single image result when done */}
           {runId && (
             <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
               <ImageGenerationResult runId={runId} />
@@ -445,9 +316,8 @@ function Img2img({
 // --------------------------------------------------------------
 // ------------------ OpenposeToImage Component -----------------
 // --------------------------------------------------------------
-
 /**
- * controlpose generates 1 image => 50 credits
+ * controlpose => 1 image => 50 credits
  */
 function OpenposeToImage({
   credits,
@@ -467,16 +337,14 @@ function OpenposeToImage({
     e.preventDefault();
     if (loading) return;
 
-    // Check if user has enough credits (50 for 1 image)
+    // Check credits
     if (credits < 50) {
-      alert("Not enough credits to generate an image!");
+      alert("Not enough credits!");
       return;
     }
-
-    setLoading(true);
-    // Deduct 50 credits right away
     setCredits((prev) => prev - 50);
 
+    setLoading(true);
     generate_img_with_controlnet(pose, prompt)
       .then((res) => {
         if (res) {
@@ -548,6 +416,7 @@ function OpenposeToImage({
     </Card>
   );
 }
+
 
 
 // --- old ---- //
