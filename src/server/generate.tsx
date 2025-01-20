@@ -11,8 +11,8 @@ export async function generate(positive_prompt: string, negative_prompt: string)
     return await client.run({
         deployment_id: process.env.COMFY_DEPLOYMENT_ID!,
         inputs: {
-            "positive_prompt": positive_prompt,
-            "negative_prompt": negative_prompt
+            "input_text": positive_prompt,
+            // "negative_prompt": negative_prompt
         }
     })
 }
