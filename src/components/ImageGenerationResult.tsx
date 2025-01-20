@@ -1,4 +1,3 @@
-"use client";
 import { LoadingIcon } from "@/components/LoadingIcon";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -7,7 +6,7 @@ import { useEffect, useState } from "react";
 
 export function ImageGenerationResult({
   runId,
-  className
+  className,
 }: { runId: string } & React.ComponentProps<"div">) {
   const [image, setImage] = useState("");
   const [status, setStatus] = useState<string>("preparing");
@@ -31,16 +30,24 @@ export function ImageGenerationResult({
   }, [runId]);
 
   return (
-    <div className={cn("border border-gray-200 w-full aspect-[512/768] rounded-lg relative", className)}>
+    <div
+      className={cn(
+        "border border-gray-200 w-full aspect-[512/768] rounded-lg relative overflow-hidden",
+        className,
+        loading
+          ? "bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 animate-pulse"
+          : ""
+      )}
+    >
       {!loading && image && (
         <img
           className="w-full h-full object-contain"
           src={image}
           alt="Generated image"
-        ></img>
+        />
       )}
       {!image && status && (
-        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center gap-2">
+        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center gap-2 text-white">
           {status} <LoadingIcon />
         </div>
       )}
